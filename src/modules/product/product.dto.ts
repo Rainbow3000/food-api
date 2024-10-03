@@ -8,15 +8,7 @@ export class CreateProductDto {
   description: string;
 
   @IsString()
-  @ValidateIf((o) => !o.video)
   image: string;
-
-  @IsString()
-  @ValidateIf((o) => !o.image)
-  video: string;
-
-  @IsString()
-  color: string;
 
   @IsString()
   size: string;
@@ -30,10 +22,6 @@ export class CreateProductDto {
   @IsNumber()
   @IsOptional()
   sold: number;
-
-  @IsNumber()
-  @IsOptional()
-  stock: number;
 
   @IsNumber()
   categoryId: number;
@@ -47,15 +35,7 @@ export class UpdateProductDto {
   description: string;
 
   @IsString()
-  @ValidateIf((o) => !o.video)
   image: string;
-
-  @IsString()
-  @ValidateIf((o) => !o.image)
-  video: string;
-
-  @IsString()
-  color: string;
 
   @IsString()
   size: string;
@@ -69,10 +49,6 @@ export class UpdateProductDto {
   @IsNumber()
   @IsOptional()
   sold: number;
-
-  @IsNumber()
-  @IsOptional()
-  stock: number;
 
   @IsNumber()
   categoryId: number;
@@ -94,14 +70,6 @@ export class GetListProductDto {
   @IsNumberString()
   @IsOptional()
   categoryId?: number;
-
-  @IsString()
-  @IsOptional()
-  size?: string;
-
-  @IsString()
-  @IsOptional()
-  color?: string;
 
   @IsString()
   @IsOptional()

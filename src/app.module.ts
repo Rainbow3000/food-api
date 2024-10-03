@@ -13,10 +13,10 @@ import { CategoryModule } from './modules/category/category.module';
 import { ProductModule } from './modules/product/product.module';
 import { OrderModule } from './modules/order/order.module';
 import { OrderDetailsModule } from './modules/order-details/order-details.module';
-import { ChatModule } from './modules/chat/chat.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { MailModule } from './modules/mail/mail.module';
 import { ChartsModule } from './modules/charts/charts.module';
+import { ChatGateway } from './chat/chat.gateway';
 
 @Module({
   imports: [
@@ -45,7 +45,6 @@ import { ChartsModule } from './modules/charts/charts.module';
     OrderModule,
     OrderDetailsModule,
     CommentModule,
-    ChatModule,
     MailModule,
     JwtModule,
     ChartsModule
@@ -53,6 +52,7 @@ import { ChartsModule } from './modules/charts/charts.module';
   controllers: [AppController],
   providers: [
     AppService,
+    ChatGateway,
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
@@ -61,6 +61,7 @@ import { ChartsModule } from './modules/charts/charts.module';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    ChatGateway,
   ],
 })
 export class AppModule {}

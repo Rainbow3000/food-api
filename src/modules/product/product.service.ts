@@ -44,15 +44,7 @@ export class ProductService {
     if (payload.q) {
       where.name = Like(`%${payload.q}%`);
     }
-
-    if (payload.size) {
-      where.size = Like(`%${payload.size}%`);
-    }
-
-    if (payload.color) {
-      where.color = Like(`%${payload.color}%`);
-    }
-
+    
     if (payload.categoryId) {
       where.categoryId = payload.categoryId;
     }

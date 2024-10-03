@@ -14,12 +14,6 @@ export class ProductEntity extends BaseEntity {
   @Column({ type: 'longtext', nullable: true })
   image: string;
 
-  @Column({ type: 'longtext', nullable: true })
-  video: string;
-
-  @Column({ type: 'text', nullable: false })
-  color: string;
-
   @Column({ type: 'text', nullable: false })
   size: string;
 
@@ -31,9 +25,6 @@ export class ProductEntity extends BaseEntity {
 
   @Column({ type: 'int', default: 10 })
   sold: number;
-
-  @Column({ type: 'int', default: 0 })
-  stock: number;
 
   @Column({ type: 'int', name: 'category_id' })
   categoryId: number;
