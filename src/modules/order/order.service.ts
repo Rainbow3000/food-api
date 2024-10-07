@@ -17,6 +17,7 @@ import { UserRoleEntity } from 'src/entities/user_role.entity';
 import { UserEntity } from 'src/entities/user.entity';
 import { ProductEntity } from 'src/entities/product.entity';
 import { ChatGateway } from 'src/chat/chat.gateway';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class OrderService {
@@ -26,6 +27,7 @@ export class OrderService {
     private readonly dataSource: DataSource,
     private readonly mailService: MailService,
     private readonly chatGateway: ChatGateway,
+    private readonly notificationService: NotificationService,
   ) {}
 
   async list(payload: GetListOrderDto) {
@@ -124,6 +126,10 @@ export class OrderService {
   async create(payload: CreateOrderDto, userId: number) {
     const order = await this.orderRepository.insert({ ...payload, userId });
 
+    const content = 'Bạn có một đơn hàng mới !';
+
+    await this.notificationService.create({ content }, userId);
+
     const token = Math.floor(1000 + Math.random() * 9000).toString();
 
     const user = await this.dataSource
@@ -136,7 +142,7 @@ export class OrderService {
       console.log(error);
     }
 
-    this.chatGateway.handleNotifyUserOrder();
+    this.chatGateway.handleNotifyUserOrder(content);
 
     return {
       statusCode: 201,

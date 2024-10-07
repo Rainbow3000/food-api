@@ -17,6 +17,7 @@ import { CommentModule } from './modules/comment/comment.module';
 import { MailModule } from './modules/mail/mail.module';
 import { ChartsModule } from './modules/charts/charts.module';
 import { ChatGateway } from './chat/chat.gateway';
+import { NotificationModule } from './modules/notification/notification.module';
 
 @Module({
   imports: [
@@ -47,7 +48,8 @@ import { ChatGateway } from './chat/chat.gateway';
     CommentModule,
     MailModule,
     JwtModule,
-    ChartsModule
+    ChartsModule,
+    NotificationModule
   ],
   controllers: [AppController],
   providers: [

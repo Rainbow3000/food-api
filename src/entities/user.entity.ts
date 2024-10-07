@@ -5,6 +5,7 @@ import { OrderEntity } from './order.entity';
 import { CommentEntity } from './comment.entity';
 import { ChatEntity } from './chat.entity';
 import { UserInfoEntity } from './user_info.entity';
+import { NotificationEntity } from './notification.entity';
 
 @Entity('user')
 export class UserEntity extends BaseEntity {
@@ -28,6 +29,9 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => CommentEntity, (comment) => comment.user)
   comments: CommentEntity[];
+
+  @OneToMany(() => NotificationEntity, (notify) => notify.user)
+  notifications: NotificationEntity[];
 
   @OneToMany(() => ChatEntity, (chat) => chat.toUser)
   chats: ChatEntity[];

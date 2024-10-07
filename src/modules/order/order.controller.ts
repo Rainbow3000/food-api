@@ -17,7 +17,7 @@ import { ROLE } from 'src/common/enums';
 
 @Controller(`${BASE_API_URL}/order`)
 export class OrderController {
-  constructor(private orderService: OrderService) {}
+  constructor(private readonly orderService: OrderService) {}
 
   @Get()
   list(@Query() query: GetListOrderDto) {

@@ -51,7 +51,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     return 'Message sent';
   }
 
-  async handleNotifyUserOrder() {
+  async handleNotifyUserOrder(payload: string) {
     const admin = await this.dataSource
       .getRepository(UserEntity)
       .findOneBy({ email: 'super_admin@gmail.com' });
@@ -62,7 +62,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       if (socketId) {
         this.server
           .to(socketId)
-          .emit('notify-order', 'Bạn có một đơn hàng mới');
+          .emit('notify-order', payload);
       }
     }
   }
