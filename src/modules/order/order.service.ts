@@ -16,6 +16,7 @@ import { ORDER_STATUS, ROLE } from 'src/common/enums';
 import { UserRoleEntity } from 'src/entities/user_role.entity';
 import { UserEntity } from 'src/entities/user.entity';
 import { ProductEntity } from 'src/entities/product.entity';
+import { ChatGateway } from 'src/chat/chat.gateway';
 
 @Injectable()
 export class OrderService {
@@ -24,16 +25,17 @@ export class OrderService {
     private readonly orderRepository: Repository<OrderEntity>,
     private readonly dataSource: DataSource,
     private readonly mailService: MailService,
-  ) { }
+    private readonly chatGateway: ChatGateway,
+  ) {}
 
   async list(payload: GetListOrderDto) {
     const limit = payload.limit || DEFAULT_LIMIT;
     const page = payload.page || DEFAULT_PAGE;
 
-    const where: FindOptionsWhere<OrderEntity> = {}
+    const where: FindOptionsWhere<OrderEntity> = {};
 
     if (payload.orderStatus) {
-      where.orderStatus = payload.orderStatus
+      where.orderStatus = payload.orderStatus;
     }
 
     const data = await this.orderRepository.find({
@@ -52,9 +54,9 @@ export class OrderService {
         },
       },
       where,
-      order:{
-        id:'DESC'
-      }
+      order: {
+        id: 'DESC',
+      },
     });
 
     return {
@@ -84,9 +86,9 @@ export class OrderService {
       where: {
         userId,
       },
-      order:{
-        id:'DESC'
-      }
+      order: {
+        id: 'DESC',
+      },
     });
 
     return {
@@ -124,16 +126,17 @@ export class OrderService {
 
     const token = Math.floor(1000 + Math.random() * 9000).toString();
 
-    const user = await this.dataSource.getRepository(UserEntity).findOneBy({ id: userId })
+    const user = await this.dataSource
+      .getRepository(UserEntity)
+      .findOneBy({ id: userId });
 
     try {
-      await this.mailService.sendUserWelcome(
-        user.email,
-        token,
-      );
+      await this.mailService.sendUserWelcome(user.email, token);
     } catch (error) {
       console.log(error);
     }
+
+    this.chatGateway.handleNotifyUserOrder();
 
     return {
       statusCode: 201,
@@ -173,12 +176,21 @@ export class OrderService {
     await this.orderRepository.update(id, { orderStatus });
 
     if (order.orderDetails?.length) {
-      await Promise.all(order.orderDetails.map(async item => {
-        const product = await this.dataSource.getRepository(ProductEntity).findOneBy({ id: item.product.id })
-        if (product) {
-          await this.dataSource.getRepository(ProductEntity).update({ id: product.id }, { sold: product.sold + item.quantity })
-        }
-      }))
+      await Promise.all(
+        order.orderDetails.map(async (item) => {
+          const product = await this.dataSource
+            .getRepository(ProductEntity)
+            .findOneBy({ id: item.product.id });
+          if (product) {
+            await this.dataSource
+              .getRepository(ProductEntity)
+              .update(
+                { id: product.id },
+                { sold: product.sold + item.quantity },
+              );
+          }
+        }),
+      );
     }
 
     return {

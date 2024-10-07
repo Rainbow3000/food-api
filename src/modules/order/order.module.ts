@@ -4,10 +4,11 @@ import { OrderService } from './order.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrderEntity } from 'src/entities/order.entity';
 import { MailModule } from '../mail/mail.module';
+import { ChatGateway } from 'src/chat/chat.gateway';
 
 @Module({
   imports: [TypeOrmModule.forFeature([OrderEntity]), MailModule],
   controllers: [OrderController],
-  providers: [OrderService],
+  providers: [OrderService, ChatGateway],
 })
 export class OrderModule {}

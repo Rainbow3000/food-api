@@ -7,6 +7,7 @@ import { ROLE } from './common/enums';
 import { UserEntity } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { UserRoleEntity } from './entities/user_role.entity';
+import { ChatGateway } from './chat/chat.gateway';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,9 +16,12 @@ async function bootstrap() {
     origin: '*',
   });
   await app.listen(5000);
-  const a = 10;
 
   const dataSource = await app.get(DataSource);
+
+  const socket = await app.get(ChatGateway)
+
+  socket.server.emit('server-connected','msg from server')
 
   await initRole(dataSource)
 
