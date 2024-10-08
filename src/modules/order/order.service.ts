@@ -126,7 +126,7 @@ export class OrderService {
   async create(payload: CreateOrderDto, userId: number) {
     const order = await this.orderRepository.insert({ ...payload, userId });
 
-    const content = 'Bạn có một đơn hàng mới !';
+    const content = 'Bạn có một đơn hàng mới';
 
     await this.notificationService.create({ content }, userId);
 
@@ -156,9 +156,9 @@ export class OrderService {
       where: {
         id,
       },
-      relations:{
-        orderDetails: true
-      }
+      relations: {
+        orderDetails: true,
+      },
     });
 
     if (order.orderStatus === orderStatus) return;
@@ -195,7 +195,7 @@ export class OrderService {
         order.orderDetails.map(async (item) => {
           const product = await this.dataSource
             .getRepository(ProductEntity)
-            .findOneBy({ id: item.product.id });
+            .findOneBy({ id: item.productId });
           if (product) {
             await this.dataSource
               .getRepository(ProductEntity)
@@ -211,14 +211,17 @@ export class OrderService {
     let content = '';
 
     if (orderStatus === ORDER_STATUS.DELIVERY) {
-      content = 'Đơn hàng của bạn đang được vận chuyển';
+      content = `Đơn hàng #{${order.id}} đang được giao`;
     } else if (orderStatus === ORDER_STATUS.SUCCESS) {
-      content = 'Đơn hàng của bạn đã được giao';
+      content = `Đơn hàng #{${order.id}} đã hoàn tất`;
     } else if (orderStatus === ORDER_STATUS.CANCEL) {
-      content = 'Đơn hàng của bạn đã bị hủy';
+      content = `Đơn hàng #{${order.id}} đã bị hủy`;
     }
 
-    await this.notificationService.create({ content }, order.userId);
+    await this.notificationService.create(
+      { content, data: order.orderDetails },
+      order.userId,
+    );
 
     await this.chatGateway.handleNotifyUpdateOrder(content, order.userId);
 

@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TResult } from 'src/common/types';
 import { NotificationEntity } from 'src/entities/notification.entity';
 import { Repository } from 'typeorm';
-import { CreateNotificationDto } from './notification.dto';
+import {
+  CreateNotificationDto,
+  UpdateNotificationDto,
+} from './notification.dto';
 
 @Injectable()
 export class NotificationService {
@@ -27,6 +30,35 @@ export class NotificationService {
       message: 'Lấy danh sách thông báo thành công',
       data: notifications,
     } as TResult;
+  }
+
+  async update(payload: UpdateNotificationDto, id: number) {
+    const notification = await this.notificationRepository.findOneBy({ id });
+
+    if (!notification) throw new NotFoundException();
+
+    await this.notificationRepository.update(id, payload);
+
+    return { statusCode: 200, message: 'success' } as TResult;
+  }
+
+  async updateAllSeen() {
+    const notifyList = await this.notificationRepository.findBy({
+      isSeen: false,
+    });
+
+    if (!notifyList.length) return;
+
+    await Promise.all(
+      notifyList.map(async (item) => {
+        await this.notificationRepository.update(
+          { id: item.id },
+          { isSeen: true },
+        );
+      }),
+    );
+
+    return { message: 'success' };
   }
 
   async create(payload: CreateNotificationDto, userId: number) {

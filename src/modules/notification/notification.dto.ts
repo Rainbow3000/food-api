@@ -1,14 +1,28 @@
-import { IsNumber, IsOptional, IsString, ValidateIf } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateNotificationDto {
   @IsString()
-  @ValidateIf((o) => !o.image)
   content: string;
+
+  @IsArray()
+  @IsOptional()
+  data?: any;
 }
 
 export class UpdateNotificationDto {
   @IsString()
+  @IsOptional()
   content: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isSeen: boolean;
 }
 
 export class GetListNotificationDto {
@@ -23,4 +37,8 @@ export class GetListNotificationDto {
   @IsString()
   @IsOptional()
   q?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isSeen: boolean;
 }
