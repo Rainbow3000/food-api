@@ -63,9 +63,12 @@ export class CategoryService {
   }
 
   async create(payload: CreateCategoryDto) {
+    console.log(payload)
     const category = await this.categoryRepository.findOneBy({
       name: payload.name,
     });
+
+    console.log(category)
 
     if (category) {
       throw new BadRequestException(CATEGORY_EXISTED);

@@ -28,7 +28,7 @@ export class OrderService {
     private readonly mailService: MailService,
     private readonly chatGateway: ChatGateway,
     private readonly notificationService: NotificationService,
-  ) {}
+  ) { }
 
   async list(payload: GetListOrderDto) {
     const limit = payload.limit || DEFAULT_LIMIT;
@@ -152,14 +152,8 @@ export class OrderService {
   }
 
   async update(id: number, { orderStatus }: UpdateOrderDto, userId: number) {
-    const order = await this.orderRepository.findOne({
-      where: {
-        id,
-      },
-      relations:{
-        orderDetails: true
-      }
-    });
+
+    const order = await this.orderRepository.findOneBy({ id });
 
     if (order.orderStatus === orderStatus) return;
 
@@ -189,6 +183,7 @@ export class OrderService {
     }
 
     await this.orderRepository.update(id, { orderStatus });
+
 
     if (order.orderDetails?.length) {
       await Promise.all(
