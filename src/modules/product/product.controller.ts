@@ -18,7 +18,7 @@ import {
 
 @Controller(`${BASE_API_URL}/product`)
 export class ProductController {
-  constructor(private productService: ProductService) {}
+  constructor(private readonly productService: ProductService) {}
 
   @Get()
   list(@Query() query: GetListProductDto) {

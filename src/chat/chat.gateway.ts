@@ -24,6 +24,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     const userId = this.getUserIdFromClient(client);
 
+    console.log(userId)
+
     this.connectedClients.set(userId as string, client.id);
 
     // You can emit a message to the client upon connection
@@ -60,10 +62,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const socketId = this.connectedClients.get(admin.id.toString());
 
       if (socketId) {
-        this.server
-          .to(socketId)
-          .emit('notify-order', payload);
+        this.server.to(socketId).emit('notify-order', payload);
       }
+    }
+  }
+
+  async handleNotifyUpdateOrder(payload: string, userId: number) {
+    const socketId = this.connectedClients.get(userId.toString());
+
+    if (socketId) {
+      this.server.to(socketId).emit('notify-update-order', payload);
     }
   }
 

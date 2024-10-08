@@ -10,6 +10,9 @@ export class NotificationEntity extends BaseEntity {
   @Column({ type: 'varchar', nullable: true })
   content: string;
 
+  @Column({ type: 'json', nullable: true })
+  data: unknown;
+
   @ManyToOne(() => UserEntity, (user) => user.comments)
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;

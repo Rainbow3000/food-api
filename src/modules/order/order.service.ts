@@ -152,7 +152,16 @@ export class OrderService {
   }
 
   async update(id: number, { orderStatus }: UpdateOrderDto, userId: number) {
-    const order = await this.orderRepository.findOneBy({ id });
+    const order = await this.orderRepository.findOne({
+      where: {
+        id,
+      },
+      relations:{
+        orderDetails: true
+      }
+    });
+
+    if (order.orderStatus === orderStatus) return;
 
     if (!order) throw new BadRequestException(ORDER_NOT_FOUND);
 
@@ -199,6 +208,20 @@ export class OrderService {
       );
     }
 
+    let content = '';
+
+    if (orderStatus === ORDER_STATUS.DELIVERY) {
+      content = 'Đơn hàng của bạn đang được vận chuyển';
+    } else if (orderStatus === ORDER_STATUS.SUCCESS) {
+      content = 'Đơn hàng của bạn đã được giao';
+    } else if (orderStatus === ORDER_STATUS.CANCEL) {
+      content = 'Đơn hàng của bạn đã bị hủy';
+    }
+
+    await this.notificationService.create({ content }, order.userId);
+
+    await this.chatGateway.handleNotifyUpdateOrder(content, order.userId);
+
     return {
       statusCode: 200,
       message: 'Cập nhật đơn hàng thành công',
@@ -233,7 +256,7 @@ export class OrderService {
 
     return {
       statusCode: 200,
-      message: 'Xóa đon hàng thành công',
+      message: 'Xóa đơn hàng thành công',
     };
   }
 }
