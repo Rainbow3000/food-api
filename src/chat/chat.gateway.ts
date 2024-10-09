@@ -20,11 +20,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   // Handle new connections
   handleConnection(client: Socket) {
-    console.log('Client connected:', client.id);
-
     const userId = this.getUserIdFromClient(client);
-
-    console.log(userId)
 
     this.connectedClients.set(userId as string, client.id);
 
@@ -33,23 +29,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   // Handle disconnections
-  handleDisconnect(client: Socket) {
-    console.log('Client disconnected:', client.id);
-  }
+  handleDisconnect() {}
 
   // Handle messages from clients
   @SubscribeMessage('message')
   handleMessage(client: Socket, payload: any): string {
-    console.log('Message received:', payload);
     // Emit message to all connected clients
     this.server.emit('message', payload);
-    return 'Message sent';
-  }
-
-  @SubscribeMessage('admin-socket-id')
-  handleGetAdminSocketId(client: Socket, payload: any): string {
-    console.log('admin socket id:', client.id);
-    // Emit message to all connected clients
     return 'Message sent';
   }
 

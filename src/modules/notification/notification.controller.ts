@@ -1,7 +1,18 @@
-import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { BASE_API_URL } from 'src/common/constants';
 import { NotificationService } from './notification.service';
-import { CreateNotificationDto } from './notification.dto';
+import {
+  CreateNotificationDto,
+  UpdateNotificationDto,
+} from './notification.dto';
 
 @Controller(`${BASE_API_URL}/notification`)
 export class NotificationController {
@@ -10,6 +21,16 @@ export class NotificationController {
   @Get()
   list(userId: number) {
     return this.notificationService.listByUserId(userId);
+  }
+
+  @Put(':id')
+  update(@Body() payload: UpdateNotificationDto, @Param('id') id: number) {
+    return this.notificationService.update(payload, id);
+  }
+
+  @Post('update-seen')
+  updateAllSeen() {
+    return this.notificationService.updateAllSeen();
   }
 
   @Post()

@@ -10,6 +10,9 @@ export class NotificationEntity extends BaseEntity {
   @Column({ type: 'varchar', nullable: true })
   content: string;
 
+  @Column({ type: 'boolean', name: 'is_seen', default: false })
+  isSeen: boolean;
+
   @Column({ type: 'json', nullable: true })
   data: unknown;
 
