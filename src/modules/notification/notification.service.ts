@@ -13,7 +13,7 @@ export class NotificationService {
   constructor(
     @InjectRepository(NotificationEntity)
     private readonly notificationRepository: Repository<NotificationEntity>,
-  ) {}
+  ) { }
 
   async listByUserId(userId: number) {
     const notifications = await this.notificationRepository.find({
@@ -42,9 +42,10 @@ export class NotificationService {
     return { statusCode: 200, message: 'success' } as TResult;
   }
 
-  async updateAllSeen() {
+  async updateAllSeen(userId: number) {
     const notifyList = await this.notificationRepository.findBy({
       isSeen: false,
+      userId
     });
 
     if (!notifyList.length) return;

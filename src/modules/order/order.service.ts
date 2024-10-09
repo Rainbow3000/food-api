@@ -212,11 +212,11 @@ export class OrderService {
     let content = '';
 
     if (orderStatus === ORDER_STATUS.DELIVERY) {
-      content = `Đơn hàng #{${order.id}} đang được giao`;
+      content = `Đơn hàng #ID ${order.id} đang được giao`;
     } else if (orderStatus === ORDER_STATUS.SUCCESS) {
-      content = `Đơn hàng #{${order.id}} đã hoàn tất`;
+      content = `Đơn hàng #ID ${order.id} đã hoàn tất`;
     } else if (orderStatus === ORDER_STATUS.CANCEL) {
-      content = `Đơn hàng #{${order.id}} đã bị hủy`;
+      content = `Đơn hàng #ID ${order.id} đã bị hủy`;
     }
 
     await this.notificationService.create(
