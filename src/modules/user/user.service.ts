@@ -77,7 +77,7 @@ export class UserService {
       where.email = Like(`%${payload.q}%`);
     }
 
-    where.email = Not('super_admin@gmail.com')
+    where.email = Not('superadmin@gmail.com')
 
     const data = await this.userRepository.find({
       skip: (page - 1) * limit,

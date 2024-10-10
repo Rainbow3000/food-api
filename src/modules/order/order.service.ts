@@ -7,7 +7,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, FindOptionsWhere, Repository } from 'typeorm';
 import { DEFAULT_LIMIT, DEFAULT_PAGE } from 'src/common/constants';
 import { ORDER_NOT_FOUND, USER_NOT_FOUND } from 'src/common/error';
-import { CreateOrderDto, GetListOrderDto, UpdateOrderDto } from './Order.dto';
 import { OrderEntity } from 'src/entities/order.entity';
 import { OrderDetailsEntity } from 'src/entities/order_details.entity';
 import { MailService } from '../mail/mail.service';
@@ -18,6 +17,7 @@ import { UserEntity } from 'src/entities/user.entity';
 import { ProductEntity } from 'src/entities/product.entity';
 import { ChatGateway } from 'src/chat/chat.gateway';
 import { NotificationService } from '../notification/notification.service';
+import { CreateOrderDto, GetListOrderDto, UpdateOrderDto } from './order.dto';
 
 @Injectable()
 export class OrderService {

@@ -47,10 +47,10 @@ async function initRole(dataSource: DataSource) {
 }
 
 async function InitSupperAmin(dataSource: DataSource) {
-  const admin = await dataSource.getRepository(UserEntity).findOneBy({ email: 'super_admin@gmail.com' })
+  const admin = await dataSource.getRepository(UserEntity).findOneBy({ email: 'superadmin@gmail.com' })
 
   if (!admin) {
-    const user = await dataSource.getRepository(UserEntity).save({ email: 'super_admin@gmail.com', password: await bcrypt.hash('123456', 10), userName: 'Admin' })
+    const user = await dataSource.getRepository(UserEntity).save({ email: 'superadmin@gmail.com', password: await bcrypt.hash('123456', 10), userName: 'Admin' })
 
     const role = await dataSource.getRepository(RoleEntity).findOneBy({ roleName: ROLE.SUPER_ADMIN });
 
